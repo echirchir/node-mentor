@@ -4,6 +4,7 @@ const async = require("async")
 const assert = require("assert")
 
 var cassandra = require('cassandra-driver');
+var timeId = cassandra.types.TimeUuid;
 
 var client = new cassandra.Client({contactPoints : ['127.0.0.1'], keyspace: 'mentor'});
 
@@ -23,26 +24,21 @@ router.post('/', function(req, res, next){
 
 	console.log(username + " " + email + " " + password);
 
-	const id = cassandra.types.Uuid;
+	var id = timeId.now()
 
-	const queryString = [{
-		query: 'insert into mentor.users (id, username, email, password) values(?, ?, ?, ?)',
-		param : [id, username, email, password]
-	}]
+	const query = 'insert into mentor.users (id, username, email, password) values(?, ?, ?, ?)'
 
-	client.batch(queryString, { prepare: true }, (err, results) => {
+	client.execute(query, [id, username, email, password], {prepared : true}, (err, results) => {
 		assert.ifError(err)
 		if (!err){
 			console.log("the user was updated to the cluster successfully")
-		} else{
-			console.log(err)
 		}
 		
 		client.shutdown()
 		process.exit()
 	});
 
-	res.redirect('/');
+	res.redirect('/create');
 });
 
 module.exports = router;
