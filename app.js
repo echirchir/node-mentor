@@ -14,7 +14,8 @@ var create = require('./routes/create');
 
 var app = express();
 
-var client = new cassandra.Client({contactPoints : ['127.0.0.1']});
+var client = new cassandra.Client({contactPoints : ['127.0.0.1'], keyspace: 'mentor'});
+
 client.connect(function(err, result){
     console.log('cassandra connected');
 });
