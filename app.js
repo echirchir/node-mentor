@@ -14,6 +14,11 @@ var create = require('./routes/create');
 
 var app = express();
 
+var client = new cassandra.Client({contactPoints : ['127.0.0.1']});
+client.connect(function(err, result){
+    console.log('cassandra connected');
+});
+
 app.listen(5000);
 
 app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutDir: __dirname + '/views/layouts/'}))
