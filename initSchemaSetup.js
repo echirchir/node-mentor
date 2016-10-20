@@ -10,9 +10,7 @@ var connectionOptions = {
 	keyspace: 'system'
 };
 
-
 var client = new cassandra.Client(connectionOptions);
-
 
 // connect the client to the db
 
