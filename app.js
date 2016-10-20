@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 
 var hbs = require('express-handlebars');
 
+var cassandra = require('cassandra-driver');
+
 var routes = require('./routes/index');
 var create = require('./routes/create');
 
