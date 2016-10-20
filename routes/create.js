@@ -26,6 +26,8 @@ router.post('/', function(req, res, next){
 
 	var id = timeId.now()
 
+	/* switch to an array of queries */
+
 	const query = 'insert into mentor.users (id, username, email, password) values(?, ?, ?, ?)'
 
 	client.execute(query, [id, username, email, password], {prepared : true}, (err, results) => {
@@ -38,7 +40,8 @@ router.post('/', function(req, res, next){
 		process.exit()
 	});
 
-	res.redirect('/create');
+	res.redirect('back')
+
 });
 
 module.exports = router;
