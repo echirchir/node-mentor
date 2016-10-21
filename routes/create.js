@@ -6,41 +6,39 @@ const assert = require("assert")
 var cassandra = require('cassandra-driver');
 var timeId = cassandra.types.TimeUuid;
 
-var client = new cassandra.Client({contactPoints : ['127.0.0.1'], keyspace: 'mentor'});
+var client = new cassandra.Client({ contactPoints: ['127.0.0.1'], keyspace: 'mentor' });
 
 router.get('/', function(req, res, next) {
-  res.render('register', { title: 'CodeMentor - Register' });
+    res.render('register', { title: 'CodeMentor - Register' });
 });
 
-client.connect(function(err, result){
+client.connect(function(err, result) {
     console.log('cassandra connected');
 });
 
-router.post('/', function(req, res, next){
-	
-	const username = req.body.username;
-	const email = req.body.email;
-	const password = req.body.password;
+router.post('/', function(req, res, next) {
 
-	console.log(username + " " + email + " " + password);
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
 
-	var id = timeId.now()
+    console.log(username + " " + email + " " + password);
 
-	/* switch to an array of queries */
+    var id = timeId.now()
 
-	const query = 'insert into mentor.users (id, username, email, password) values(?, ?, ?, ?)'
+    /* switch to an array of queries */
 
-	client.execute(query, [id, username, email, password], {prepared : true}, (err, results) => {
-		assert.ifError(err)
-		if (!err){
-			console.log("the user was updated to the cluster successfully")
-		}
-		
-		client.shutdown()
-		process.exit()
-	});
+    const query = 'insert into mentor.users (id, username, email, password) values(?, ?, ?, ?)'
 
-	res.redirect('back')
+    client.execute(query, [id, username, email, password], { prepared: true }, (err, results) => {
+        assert.ifError(err)
+        if (!err) {
+            console.log("the user was updated to the cluster successfully")
+        }
+
+    });
+
+    res.redirect('back')
 
 });
 
